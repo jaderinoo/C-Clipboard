@@ -27,10 +27,10 @@ void clippy()
 	{
 		HANDLE clip;
 		clip = GetClipboardData(CF_TEXT);
-		// lock and copy
+		//Lock and copy
 		copy = (LPSTR)GlobalLock(clip);
 		compare = copy;
-		// unlock 
+		//Unlock 
 		GlobalUnlock(clip);
 		CloseClipboard();
 	}
@@ -38,6 +38,8 @@ void clippy()
 	//Grabs current time
 	time_t a = time(nullptr);
 	struct tm time_info;
+
+	//Formats the time
 	if (localtime_s(&time_info, &a) == 0) strftime(currentTime, sizeof(currentTime), "%H:%M:%S", &time_info);
 
 	//Prints current time
@@ -48,20 +50,23 @@ void clippy()
 
 	//Loop and check if copy and compare are the same
 	while (copy == compare) {
-		Sleep(1000);
+
+		//Wait for 5 seconds before each check 
+		//This can be changed to any amount of time
+		Sleep(5000);
 
 		if (OpenClipboard(NULL))
 		{
 			HANDLE clip;
 			clip = GetClipboardData(CF_TEXT);
-			// lock and copy
+			//Lock and copy
 			compare = (LPSTR)GlobalLock(clip);
-			// unlock 
+			//Unlock 
 			GlobalUnlock(clip);
 			CloseClipboard();
 		}
 	}
 
-	//if not, return to main and call recursively 
+	//If not, return to main and call recursively 
 	main();
 }
